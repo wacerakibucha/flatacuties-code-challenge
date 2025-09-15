@@ -1,0 +1,44 @@
+const animalList = document.getElementById("animal-list");
+const animalName = document.getElementById("animal-name");
+const animalImage = document.getElementById("animal-image");
+const animalVotes = document.getElementById("animal-votes");
+const voteBtn = document.getElementById("vote-btn");
+const resetBtn = document.getElementById("reset-btn");
+
+let currentAnimal = null;
+
+// Fetch and display animal list
+fetch("http://localhost:3000/characters")
+  .then((res) => res.json())
+  .then((animals) => {
+    animals.forEach((animal) => {
+      const li = document.createElement("li");
+      li.textContent = animal.name;
+      li.addEventListener("click", () => showAnimal(animal));
+      animalList.appendChild(li);
+    });
+  });
+
+// Display selected animal
+function showAnimal(animal) {
+  currentAnimal = { ...animal }; // copy to avoid altering server data
+  animalName.textContent = animal.name;
+  animalImage.src = animal.image;
+  animalVotes.textContent = animal.votes;
+}
+
+// Vote button
+voteBtn.addEventListener("click", () => {
+  if (currentAnimal) {
+    currentAnimal.votes += 1;
+    animalVotes.textContent = currentAnimal.votes;
+  }
+});
+
+// Reset button
+resetBtn.addEventListener("click", () => {
+  if (currentAnimal) {
+    currentAnimal.votes = 0;
+    animalVotes.textContent = currentAnimal.votes;
+  }
+});
