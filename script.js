@@ -42,3 +42,23 @@ resetBtn.addEventListener("click", () => {
     animalVotes.textContent = currentAnimal.votes;
   }
 });
+form.addEventListener("submit", (event) => {
+  event.preventDefault()
+
+  const name = document.getElementById("name").value
+  const image = document.getElementById("image").value
+
+  const newAnimal = {
+    id: Date.now(),
+    name: name,
+    image: image,
+    votes: 0
+  }
+
+  const li = document.createElement("li")
+  li.textContent = newAnimal.name
+  li.addEventListener("click", () => showAnimal(newAnimal))
+  animalList.appendChild(li)
+
+  form.reset()
+})
