@@ -4,6 +4,7 @@ const animalImage = document.getElementById("animal-image");
 const animalVotes = document.getElementById("animal-votes");
 const voteBtn = document.getElementById("vote-btn");
 const resetBtn = document.getElementById("reset-btn");
+const form = document.getElementById("animal-form");
 
 let currentAnimal = null;
 
