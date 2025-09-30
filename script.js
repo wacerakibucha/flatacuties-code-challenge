@@ -13,10 +13,7 @@ fetch("http://localhost:3000/characters")
   .then((res) => res.json())
   .then((animals) => {
     animals.forEach((animal) => {
-      const li = document.createElement("li");
-      li.textContent = animal.name;
-      li.addEventListener("click", () => showAnimal(animal));
-      animalList.appendChild(li);
+      addAnimalToList(animal);
     });
   })
   .catch((err) => console.error("Error fetching animals:", err));
@@ -29,40 +26,44 @@ function showAnimal(animal) {
   animalVotes.textContent = animal.votes;
 }
 
+// Add an animal to the list
+function addAnimalToList(animal) {
+  const li = document.createElement("li");
+  li.textContent = animal.name;
+  li.addEventListener("click", () => showAnimal(animal));
+  animalList.appendChild(li);
+}
+
 // Vote button
 voteBtn.addEventListener("click", () => {
-  if (currentAnimal) {
-    currentAnimal.votes += 1;
-    animalVotes.textContent = currentAnimal.votes;
-  }
+  if (!currentAnimal) return alert("Please select an animal first!");
+  currentAnimal.votes += 1;
+  animalVotes.textContent = currentAnimal.votes;
 });
 
 // Reset button
 resetBtn.addEventListener("click", () => {
-  if (currentAnimal) {
-    currentAnimal.votes = 0;
-    animalVotes.textContent = currentAnimal.votes;
-  }
+  if (!currentAnimal) return alert("Please select an animal first!");
+  currentAnimal.votes = 0;
+  animalVotes.textContent = currentAnimal.votes;
 });
 
-// Add new animal
+// Add new animal via form
 form.addEventListener("submit", (event) => {
   event.preventDefault();
 
-  const name = document.getElementById("name").value;
-  const image = document.getElementById("image").value;
+  const name = document.getElementById("name").value.trim();
+  const image = document.getElementById("image").value.trim();
+
+  if (!name || !image) return alert("Please provide both name and image URL.");
 
   const newAnimal = {
     id: Date.now(),
     name: name,
     image: image,
-    votes: 0
+    votes: 0,
   };
 
-  const li = document.createElement("li");
-  li.textContent = newAnimal.name;
-  li.addEventListener("click", () => showAnimal(newAnimal));
-  animalList.appendChild(li);
-
+  addAnimalToList(newAnimal);
   form.reset();
 });
